@@ -2,13 +2,31 @@
 // Use a piece of data coming in through props to display the correct number of likes.
 // You will also add an onClick handler that utilizes `likePost` to increase the count of likes.
 // (As a stretch goal, you might want to prevent your user from "liking" the same post more than once.)
-import React from 'react';
+import React, {useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
 
+
 const LikeSection = props => {
   // 🔥 Make sure the parent of LikeSection is passing the right props!
-  const { likePost, numberOfLikes } = props;
+  const { likePost, numberOfLikes, addNewComment, postId} = props;
+
+const [isCommenting, setIsCommenting] = useState(false);
+const [newComment, setNewComment] = useState("");
+const switchIsCommenting = () => {
+  setIsCommenting(!isCommenting)
+}
+const updateNewComment = (e) => {
+  setNewComment(e.target.value)
+}
+const submitHandler = (e) => {
+e.preventDefault()
+
+addNewComment(newComment, postId)
+setNewComment("")
+switchIsCommenting()
+}
+
 
   return (
     <div>
@@ -19,10 +37,15 @@ const LikeSection = props => {
         <div className='like-section-wrapper'>
           <FontAwesomeIcon icon={faHeart} onClick = {likePost}/>
         </div>
-        <div className='like-section-wrapper'>
+        <div className='like-section-wrapper' onClick={switchIsCommenting}>
           <FontAwesomeIcon icon={faComment} />
         </div>
       </div>
+      {isCommenting && 
+      <form onSubmit = {submitHandler}>
+      <input type="text" onChange={updateNewComment}/>
+      </form>
+      }
       <p className='like-number'>{numberOfLikes} likes</p>
     </div>
   );

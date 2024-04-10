@@ -8,7 +8,7 @@
 import React, {useState} from 'react';
 // Import the Posts (plural!) and SearchBar components, since they are used inside App component
 // Import the dummyData
-import Post from "./components/Posts/Post.js";
+
 import Posts from "./components/Posts/Posts.js";
 import SearchBar from "./components/SearchBar/SearchBar.js";
 import dummyData from "./dummy-data.js";
@@ -20,6 +20,25 @@ const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
+
+const addNewComment = (commentString, postId) => {
+const newState = posts.map(post => {
+  if(post.id === postId){
+    console.log(post.comments[post.comments.length-1])
+    const newComment = {
+      id: post.comments[post.comments.length-1].id+1,
+      username: "Buddy",
+      text: commentString
+    }
+    return {
+      ...post,
+      comments : [...post.comments, newComment]
+    }
+  }
+  return post
+})
+setPosts(newState)
+}
 
   const likePost = postId => {
     const newState = posts.map(post => {
@@ -48,7 +67,7 @@ const App = () => {
   return (
     <div className='App'>
       <SearchBar/>
-      <Posts posts = {posts} likePost = {likePost}/>
+      <Posts posts = {posts} likePost = {likePost} addNewComment = {addNewComment}/>
       {/* Add SearchBar and Posts here to render them */}
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>
